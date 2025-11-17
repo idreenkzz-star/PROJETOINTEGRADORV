@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { Store, ShoppingBag } from 'lucide-react-native';
+import { Store, ShoppingBag, User } from 'lucide-react-native';
 
 export default function TabLayout() {
   return (
@@ -29,6 +29,15 @@ export default function TabLayout() {
           title: 'Cliente',
           tabBarIcon: ({ size, color }) => (
             <ShoppingBag size={size} color={color} />
+          ),
+        }}
+      />
+    <Tabs.Screen
+        name="login"
+        options={{
+          title: 'Login',
+          tabBarIcon: ({ size, color }) => (
+            <User size={size} color={color} />
           ),
         }}
       />

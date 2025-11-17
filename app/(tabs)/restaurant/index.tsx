@@ -10,7 +10,7 @@ import {
   Alert,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Plus, Trash2, Receipt } from 'lucide-react-native';
+import { Plus, Trash2, Receipt, User  } from 'lucide-react-native';
 import { useMenu } from '@/contexts/MenuContext';
 import { MenuItem } from '@/types/menu';
 
@@ -47,6 +47,7 @@ export default function RestaurantScreen() {
           style={styles.ordersButton}
           onPress={() => router.push('/restaurant/orders')}>
           <Receipt size={24} color="#FFF" />
+          <User size={24} color="#FFF" />
           {pendingOrders.length > 0 && (
             <View style={styles.badge}>
               <Text style={styles.badgeText}>{pendingOrders.length}</Text>
@@ -54,7 +55,7 @@ export default function RestaurantScreen() {
           )}
         </TouchableOpacity>
       </View>
-
+    {/* topo da pagina */}
       <FlatList
         data={menuItems}
         keyExtractor={(item) => item.id}
@@ -90,6 +91,7 @@ export default function RestaurantScreen() {
         <Plus size={28} color="#FFF" />
       </TouchableOpacity>
 
+      {/* Modal de Criação de um novo produto */}
       <Modal
         visible={selectedItem !== null}
         transparent
