@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { Store, ShoppingBag, User } from 'lucide-react-native';
+import { Store, ShoppingBag, User, Receipt } from 'lucide-react-native';
 
 export default function TabLayout() {
   return (
@@ -14,30 +14,38 @@ export default function TabLayout() {
           paddingTop: 8,
         },
       }}>
-      <Tabs.Screen
+       <Tabs.Screen
         name="restaurant"
         options={{
-          title: 'Restaurante',
-          tabBarIcon: ({ size, color }) => (
-            <Store size={size} color={color} />
+          tabBarIcon: ({ color, size }) => (
+            <Store color={color} size={size} />
           ),
         }}
       />
+
       <Tabs.Screen
         name="client"
         options={{
-          title: 'Cliente',
-          tabBarIcon: ({ size, color }) => (
-            <ShoppingBag size={size} color={color} />
+          tabBarIcon: ({ color, size }) => (
+            <ShoppingBag color={color} size={size} />
           ),
         }}
       />
-    <Tabs.Screen
+
+      <Tabs.Screen
         name="login"
         options={{
-          title: 'Login',
-          tabBarIcon: ({ size, color }) => (
-            <User size={size} color={color} />
+          tabBarIcon: ({ color, size }) => (
+            <User color={color} size={size} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="Pedidos"
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Receipt color={color} size={size} />
           ),
         }}
       />

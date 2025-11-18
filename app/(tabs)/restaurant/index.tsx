@@ -10,7 +10,7 @@ import {
   Alert,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Plus, Trash2, Receipt, User  } from 'lucide-react-native';
+import { Plus, Trash2, Receipt  } from 'lucide-react-native';
 import { useMenu } from '@/contexts/MenuContext';
 import { MenuItem } from '@/types/menu';
 
@@ -42,18 +42,11 @@ export default function RestaurantScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
+        <Image
+        source={require('@/assets/images/logo.png')}
+        style={styles.logo}
+      />
         <Text style={styles.title}>Gerenciar Cardápio</Text>
-        <TouchableOpacity
-          style={styles.ordersButton}
-          onPress={() => router.push('/restaurant/orders')}>
-          <Receipt size={24} color="#FFF" />
-          <User size={24} color="#FFF" />
-          {pendingOrders.length > 0 && (
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>{pendingOrders.length}</Text>
-            </View>
-          )}
-        </TouchableOpacity>
       </View>
     {/* topo da pagina */}
       <FlatList
@@ -149,6 +142,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  logo: {
+    width: 100,
+    height: 100,
+    borderRadius: 6,
   },
   title: {
     fontSize: 24,
