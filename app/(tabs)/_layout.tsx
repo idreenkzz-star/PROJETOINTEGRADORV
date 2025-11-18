@@ -1,7 +1,9 @@
 import { Tabs } from 'expo-router';
-import { Store, ShoppingBag, User, Receipt } from 'lucide-react-native';
+import { Store, ShoppingBag, User, Receipt, LogOut  } from 'lucide-react-native';
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function TabLayout() {
+  const { logged } = useAuth();
   return (
     <Tabs
       screenOptions={{
@@ -35,9 +37,12 @@ export default function TabLayout() {
       <Tabs.Screen
         name="login"
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <User color={color} size={size} />
-          ),
+          tabBarIcon: ({ color, size }) =>
+            logged ? (
+              <LogOut color={color} size={size} />
+            ) : (
+              <User color={color} size={size} />
+            ),
         }}
       />
 

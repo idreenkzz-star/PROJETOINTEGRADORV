@@ -1,7 +1,25 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import { useAuth } from "@/contexts/AuthContext";
 import { User } from "lucide-react-native";
 
 export default function LoginScreen() {
+  const { logged, login, logout } = useAuth();
+
+  if (logged) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text style={{ fontSize: 20, marginBottom: 20 }}>Você está logado!</Text>
+
+        <TouchableOpacity
+          onPress={logout}
+          style={{ backgroundColor: "red", padding: 12, borderRadius: 8 }}
+        >
+          <Text style={{ color: "#fff", fontWeight: "bold" }}>Sair da Conta</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.card}>
