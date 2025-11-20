@@ -1,30 +1,40 @@
 import { createContext, useContext, useState } from "react";
 
-type UserType = "client" | "admin" | null;
+type AuthType = "admin" | "client" | null;
 
-type AuthContextType = {
-  userType: UserType;
+interface AuthContextProps {
+  userType: AuthType;
   loginAsAdmin: () => void;
   loginAsClient: () => void;
   logout: () => void;
-};
+}
 
-const AuthContext = createContext<AuthContextType>({
+const AuthContext = createContext<AuthContextProps>({
   userType: null,
   loginAsAdmin: () => {},
   loginAsClient: () => {},
   logout: () => {},
 });
 
-export const AuthProvider = ({ children }: any) => {
-  const [userType, setUserType] = useState<UserType>(null);
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [userType, setUserType] = useState<AuthType>(null);
 
-  const loginAsAdmin = () => setUserType("admin");
-  const loginAsClient = () => setUserType("client");
-  const logout = () => setUserType(null);
+  function loginAsAdmin() {
+    setUserType("admin");
+  }
+
+  function loginAsClient() {
+    setUserType("client");
+  }
+
+  function logout() {
+    setUserType(null);
+  }
 
   return (
-    <AuthContext.Provider value={{ userType, loginAsAdmin, loginAsClient, logout }}>
+    <AuthContext.Provider
+      value={{ userType, loginAsAdmin, loginAsClient, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

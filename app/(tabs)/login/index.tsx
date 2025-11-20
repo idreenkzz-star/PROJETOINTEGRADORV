@@ -1,16 +1,19 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { User } from "lucide-react-native";
-import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function LoginScreen() {
-  const { loginAsAdmin } = useAuth(); // usa admin por enquanto
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+  const { loginAsAdmin, loginAsClient } = useAuth();
 
   function handleLogin() {
-    // 🚀 Aqui você implementará login real depois
-    loginAsAdmin(); // por enquanto isso libera as telas do admin
+    // Para apresentação, você pode alterar emails fixos
+    const email = "admin@restaurante.com";
+
+    if (email === "admin@restaurante.com") {
+      loginAsAdmin();
+    } else {
+      loginAsClient();
+    }
   }
 
   return (
@@ -21,20 +24,9 @@ export default function LoginScreen() {
 
         <Text style={styles.title}>Login</Text>
 
-        <TextInput
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          style={styles.input}
-        />
+        <TextInput placeholder="Email" style={styles.input} />
 
-        <TextInput
-          placeholder="Senha"
-          secureTextEntry
-          value={senha}
-          onChangeText={setSenha}
-          style={styles.input}
-        />
+        <TextInput placeholder="Senha" secureTextEntry style={styles.input} />
 
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Entrar</Text>

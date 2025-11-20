@@ -1,57 +1,48 @@
 import { Tabs } from "expo-router";
-import { Utensils, ShoppingBag, User, LogOut, ClipboardList } from "lucide-react-native";
 import { useAuth } from "@/contexts/AuthContext";
+import {
+  ShoppingBag,
+  User,
+  Utensils,
+  ClipboardList,
+  LogOut,
+} from "lucide-react-native";
 
 export default function TabsLayout() {
   const { userType } = useAuth();
-  return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-        tabBarActiveTintColor: '#FF6B35',
-        tabBarInactiveTintColor: '#888',
-        tabBarStyle: {
-          height: 60,
-          paddingBottom: 8,
-          paddingTop: 8,
-        },
-      }}>
-        <Tabs.Screen
-        name="cardapio"
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <ShoppingBag color={color} size={size} />
-          ),
-        }}
-      />
 
+  return (
+    <Tabs screenOptions={{ headerShown: false }}>
+
+      {/* CARDÁPIO: aparece para todos */}
       <Tabs.Screen
         name="client"
         options={{
+          title: "Cardápio",
           tabBarIcon: ({ color, size }) => (
             <ShoppingBag color={color} size={size} />
           ),
         }}
       />
 
-      {/* LOGIN aparece se NÃO estiver logado */}
+      {/* LOGIN: aparece apenas para quem NÃO está logado */}
       {userType === null && (
         <Tabs.Screen
           name="login"
           options={{
-            tabBarIcon: ({ color, size }) => (
-              <User color={color} size={size} />
-            ),
+            title: "Entrar",
+            tabBarIcon: ({ color, size }) => <User color={color} size={size} />,
           }}
         />
       )}
 
-       {/* ADMIN: rotas exclusivas */}
+      {/* ABAS DO ADMIN */}
       {userType === "admin" && (
         <>
           <Tabs.Screen
             name="restaurant"
             options={{
+              title: "Gerenciar",
               tabBarIcon: ({ color, size }) => (
                 <Utensils color={color} size={size} />
               ),
@@ -59,17 +50,20 @@ export default function TabsLayout() {
           />
 
           <Tabs.Screen
-            name="orders"
+            name="pedido"
             options={{
+              title: "Pedidos",
               tabBarIcon: ({ color, size }) => (
                 <ClipboardList color={color} size={size} />
               ),
             }}
           />
 
+          {/* SAIR */}
           <Tabs.Screen
-            name="login" // mesma rota, mas agora vira LOGOUT
+            name="logout"
             options={{
+              title: "Sair",
               tabBarIcon: ({ color, size }) => (
                 <LogOut color={color} size={size} />
               ),
@@ -77,7 +71,6 @@ export default function TabsLayout() {
           />
         </>
       )}
-
     </Tabs>
   );
 }
