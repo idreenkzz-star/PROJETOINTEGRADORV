@@ -1,25 +1,30 @@
 import { createContext, useContext, useState } from "react";
 
+type UserType = "client" | "admin" | null;
+
 type AuthContextType = {
-  logged: boolean;
-  login: () => void;
+  userType: UserType;
+  loginAsAdmin: () => void;
+  loginAsClient: () => void;
   logout: () => void;
 };
 
 const AuthContext = createContext<AuthContextType>({
-  logged: false,
-  login: () => {},
+  userType: null,
+  loginAsAdmin: () => {},
+  loginAsClient: () => {},
   logout: () => {},
 });
 
 export const AuthProvider = ({ children }: any) => {
-  const [logged, setLogged] = useState(false);
+  const [userType, setUserType] = useState<UserType>(null);
 
-  const login = () => setLogged(true);
-  const logout = () => setLogged(false);
+  const loginAsAdmin = () => setUserType("admin");
+  const loginAsClient = () => setUserType("client");
+  const logout = () => setUserType(null);
 
   return (
-    <AuthContext.Provider value={{ logged, login, logout }}>
+    <AuthContext.Provider value={{ userType, loginAsAdmin, loginAsClient, logout }}>
       {children}
     </AuthContext.Provider>
   );

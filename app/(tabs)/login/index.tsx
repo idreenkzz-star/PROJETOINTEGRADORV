@@ -1,23 +1,16 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
-import { useAuth } from "@/contexts/AuthContext";
 import { User } from "lucide-react-native";
+import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function LoginScreen() {
-  const { logged, login, logout } = useAuth();
+  const { loginAsAdmin } = useAuth(); // usa admin por enquanto
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
 
-  if (logged) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text style={{ fontSize: 20, marginBottom: 20 }}>Você está logado!</Text>
-
-        <TouchableOpacity
-          onPress={logout}
-          style={{ backgroundColor: "red", padding: 12, borderRadius: 8 }}
-        >
-          <Text style={{ color: "#fff", fontWeight: "bold" }}>Sair da Conta</Text>
-        </TouchableOpacity>
-      </View>
-    );
+  function handleLogin() {
+    // 🚀 Aqui você implementará login real depois
+    loginAsAdmin(); // por enquanto isso libera as telas do admin
   }
 
   return (
@@ -30,16 +23,20 @@ export default function LoginScreen() {
 
         <TextInput
           placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
           style={styles.input}
         />
 
         <TextInput
           placeholder="Senha"
           secureTextEntry
+          value={senha}
+          onChangeText={setSenha}
           style={styles.input}
         />
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Entrar</Text>
         </TouchableOpacity>
 
