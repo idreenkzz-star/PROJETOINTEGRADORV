@@ -4,7 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useFrameworkReady } from '@/hooks/useFrameworkReady';
 import { MenuProvider } from '@/contexts/MenuContext';
 import { AuthProvider } from '@/contexts/AuthContext';
-import { initDatabase } from "@/app/services/storage/schema";
+import { initDatabase } from "@/services/web/storage";
 
 
 export default function RootLayout() {

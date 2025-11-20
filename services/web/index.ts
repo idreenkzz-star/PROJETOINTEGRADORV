@@ -1,4 +1,4 @@
-export { default as ProductService } from "services\web\orderService";
-export { default as CategoryService } from "services\web\categoryService";
-export { default as OrderService } from "services\web\orderService";
-export { default as storage } from "services\web\storage";
+export { productService as ProductService } from "./web/productService";
+export { categoryService as CategoryService } from "./web/categoryService";
+export { orderService as OrderService } from "./web/orderService";
+export { default as Storage } from "./web/storage";
