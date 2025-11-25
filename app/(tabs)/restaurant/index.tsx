@@ -42,10 +42,6 @@ export default function RestaurantScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Image
-        source={require('@/assets/images/logo.png')}
-        style={styles.logo}
-      />
         <Text style={styles.title}>Gerenciar Cardápio</Text>
       </View>
     {/* topo da pagina */}

@@ -66,6 +66,10 @@ export default function ClientScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
+         <Image
+              source={require('@/assets/images/logo.png')}
+              style={styles.logo}
+            />
         <Text style={styles.title}>Cardápio</Text>
         <TouchableOpacity
           style={styles.cartButton}
@@ -196,6 +200,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5',
+  },
+  logo: {
+    width: 100,
+    height: 100,
+    borderRadius: 6,
   },
   header: {
     backgroundColor: '#FF6B35',
