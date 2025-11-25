@@ -1,18 +1,32 @@
 import { useEffect, useState } from "react";
-import { ProductService } from "@/services/web";
+import { cardapioService } from "@/services/web/cardapioService";
 
 export function useProducts() {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<any[]>([]);
 
   async function load() {
-    const data = await ProductService.getAll();
+    const data = await cardapioService.getAll();
     setProducts(data);
   }
 
   async function add(item: any) {
-    await ProductService.create(item);
+    await cardapioService.create(item);
     await load();
   }
 
-  return { products, add, load };
+  async function remove(id: number) {
+    await cardapioService.delete(id);
+    await load();
+  }
+
+  async function update(id: number, changes: any) {
+    await cardapioService.update(id, changes);
+    await load();
+  }
+
+  useEffect(() => {
+    load();
+  }, []);
+
+  return { products, add, update, remove, load };
 }
