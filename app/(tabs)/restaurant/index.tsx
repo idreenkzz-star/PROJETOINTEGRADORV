@@ -108,6 +108,12 @@ export default function RestaurantScreen() {
                 <Text style={styles.modalCategory}>
                   {selectedItem.category}
                 </Text>
+               <TouchableOpacity
+                  style={styles.editButton}
+                  onPress={() => router.push(`/restaurant/editar-item?id=${selectedItem.id}`)}
+                >
+                  <Text style={styles.editButtonText}>Editar Prato</Text>
+                </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.deleteButton}
                   onPress={() => handleRemoveItem(selectedItem.id)}>
@@ -283,6 +289,14 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginBottom: 20,
   },
+  editButton: {
+    backgroundColor: '#FF6B35',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 16,
+    gap: 8,
+  },
   deleteButton: {
     backgroundColor: '#E74C3C',
     flexDirection: 'row',
@@ -290,6 +304,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 16,
     gap: 8,
+  },
+  editButtonText:{
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: '600',
   },
   deleteButtonText: {
     color: '#FFF',
