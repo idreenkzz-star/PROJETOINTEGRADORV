@@ -7,7 +7,9 @@ import {
   Alert,
   StyleSheet,
   ScrollView,
+  Image,
 } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useMenu } from "@/contexts/MenuContext";
 
@@ -30,7 +32,28 @@ export default function EditItemScreen() {
   const [description, setDescription] = useState(item.description);
   const [price, setPrice] = useState(String(item.price));
   const [category, setCategory] = useState(item.category);
-  const [image, setImage] = useState(item.image);
+  const [image, setImage] = useState<string | null>(item.image);
+
+  // Selecionar imagem da galeria
+  const pickImage = async () => {
+    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (!permission.granted) {
+      alert("Permissão necessária para acessar a galeria.");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.9,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
 
   const handleSave = () => {
     if (!name || !price || !category) {
@@ -43,7 +66,7 @@ export default function EditItemScreen() {
       description,
       price: Number(price),
       category,
-      image,
+      image: image || item.image,
     });
 
     Alert.alert("Sucesso", "Prato atualizado com sucesso!");
@@ -53,6 +76,19 @@ export default function EditItemScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Editar Prato</Text>
+
+      <View style={styles.imageContainer}>
+        {image ? (
+          <Image source={{ uri: image }} style={styles.previewImage} />
+        ) : (
+          <View style={styles.imagePlaceholder}>
+            <Text style={{ color: "#999" }}>Sem imagem</Text>
+          </View>
+        )}
+        <TouchableOpacity style={styles.imageButton} onPress={pickImage}>
+          <Text style={styles.imageButtonText}>Trocar Imagem</Text>
+        </TouchableOpacity>
+      </View>
 
       <Text style={styles.label}>Nome</Text>
       <TextInput style={styles.input} value={name} onChangeText={setName} />
@@ -76,9 +112,6 @@ export default function EditItemScreen() {
       <Text style={styles.label}>Categoria</Text>
       <TextInput style={styles.input} value={category} onChangeText={setCategory} />
 
-      <Text style={styles.label}>URL da Imagem</Text>
-      <TextInput style={styles.input} value={image} onChangeText={setImage} />
-
       <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
         <Text style={styles.saveText}>Salvar Alterações</Text>
       </TouchableOpacity>
@@ -89,37 +122,72 @@ export default function EditItemScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    paddingBottom: 60,
   },
   title: {
-    fontSize: 26,
-    fontWeight: "bold",
+    fontSize: 22,
+    fontWeight: "700",
     marginBottom: 20,
+    textAlign: "center",
   },
   label: {
     fontSize: 16,
-    marginBottom: 4,
-    marginTop: 10,
+    fontWeight: "600",
+    marginTop: 15,
+    marginBottom: 5,
   },
   input: {
+    backgroundColor: "#FFF",
     borderWidth: 1,
-    borderColor: "#bbb",
-    borderRadius: 8,
-    padding: 10,
-    backgroundColor: "#fff",
-  },
-  saveButton: {
-    marginTop: 20,
-    padding: 15,
+    borderColor: "#DDD",
     borderRadius: 10,
-    backgroundColor: "#ff6b35",
+    padding: 12,
+    fontSize: 16,
+  },
+
+  // imagem
+  imageContainer: {
     alignItems: "center",
+    marginBottom: 20,
+  },
+  previewImage: {
+    width: 140,
+    height: 140,
+    borderRadius: 12,
+    marginBottom: 10,
+  },
+  imagePlaceholder: {
+    width: 140,
+    height: 140,
+    borderRadius: 12,
+    backgroundColor: "#EEE",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 10,
+  },
+  imageButton: {
+    backgroundColor: "#FF6B35",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+  },
+  imageButtonText: {
+    color: "#FFF",
+    fontWeight: "700",
+  },
+
+  saveButton: {
+    backgroundColor: "#FF6B35",
+    paddingVertical: 15,
+    borderRadius: 12,
+    marginTop: 20,
   },
   saveText: {
-    color: "#fff",
+    color: "#FFF",
+    textAlign: "center",
+    fontWeight: "700",
     fontSize: 17,
-    fontWeight: "bold",
   },
+
   center: {
     flex: 1,
     justifyContent: "center",
@@ -127,5 +195,6 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 18,
+    color: "red",
   },
 });

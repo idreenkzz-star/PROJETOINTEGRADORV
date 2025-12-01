@@ -72,7 +72,7 @@ export function MenuProvider({ children }: { children: ReactNode }) {
   const addMenuItem = (item: Omit<MenuItem, "id">) => {
     const newItem: MenuItem = {
       ...item,
-      id: uuid.v4().toString(), // ID confiável
+      id: String(uuid.v4()),
     };
     setMenuItems((prev) => [...prev, newItem]);
   };
@@ -91,6 +91,8 @@ export function MenuProvider({ children }: { children: ReactNode }) {
 
   // Remover item
   const removeMenuItem = (id: string) => {
+      console.log("🗑 Removendo item:", id);
+
     setMenuItems((prev) => prev.filter((item) => item.id !== id));
   };
 
@@ -102,7 +104,7 @@ export function MenuProvider({ children }: { children: ReactNode }) {
     );
 
     const newOrder: Order = {
-      id: uuid.v4().toString(),
+      id: String(uuid.v4()),
       items,
       total,
       status: "pending",

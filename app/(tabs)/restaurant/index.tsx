@@ -109,11 +109,14 @@ export default function RestaurantScreen() {
                   {selectedItem.category}
                 </Text>
                <TouchableOpacity
-                  style={styles.editButton}
-                  onPress={() => router.push(`/restaurant/editar-item?id=${selectedItem.id}`)}
-                >
-                  <Text style={styles.editButtonText}>Editar Prato</Text>
-                </TouchableOpacity>
+                style={styles.editButton}
+                onPress={() => {
+                  setSelectedItem(null);
+                  router.push(`/restaurant/editar-item?id=${selectedItem.id}`);
+                }}
+              >
+                <Text style={styles.editButtonText}>Editar Prato</Text>
+              </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.deleteButton}
                   onPress={() => handleRemoveItem(selectedItem.id)}>
