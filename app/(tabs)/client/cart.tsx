@@ -154,10 +154,10 @@ export default function CartScreen() {
 
           <View style={styles.footer}>
             <View style={styles.nameInputContainer}>
-              <Text style={styles.nameLabel}>Seu nome:</Text>
+              <Text style={styles.nameLabel}>Cliente e Mesa:</Text>
               <TextInput
                 style={styles.nameInput}
-                placeholder="Digite seu nome"
+                placeholder="Digite nome do cliente + N° da Mesa"
                 value={customerName}
                 onChangeText={setCustomerName}
                 placeholderTextColor="#999"

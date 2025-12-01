@@ -118,7 +118,7 @@ export default function OrdersScreen() {
                 <Text style={styles.modalTitle}>Detalhes do Pedido</Text>
 
                 <View style={styles.modalSection}>
-                  <Text style={styles.modalLabel}>Cliente:</Text>
+                  <Text style={styles.modalLabel}>Mesa:</Text>
                   <Text style={styles.modalValue}>{selectedOrder.customerName}</Text>
                 </View>
 
