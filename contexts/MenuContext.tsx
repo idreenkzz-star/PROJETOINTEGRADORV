@@ -90,11 +90,27 @@ export function MenuProvider({ children }: { children: ReactNode }) {
   };
 
   // Remover item
-  const removeMenuItem = (id: string) => {
-      console.log("🗑 Removendo item:", id);
-
-    setMenuItems((prev) => prev.filter((item) => item.id !== id));
-  };
+const removeMenuItem = (id: string) => {
+  console.log("🔴 MenuContext.removeMenuItem chamado com id:", id);
+  console.log("🔴 Tipo do ID recebido:", typeof id);
+  console.log("🔴 MenuItems atuais:", menuItems.map(item => ({ id: item.id, name: item.name })));
+  
+  setMenuItems((prev) => {
+    const next = prev.filter((item) => {
+      const match = String(item.id) === String(id);
+      console.log(`🔴 Comparando: "${item.id}" === "${id}" ? ${!match ? 'MANTÉM' : 'REMOVE'}`);
+      return !match; // Retorna true para MANTER, false para REMOVER
+    });
+    
+    console.log("🔴 MenuContext: antes:", prev.length, "depois:", next.length);
+    
+    if (prev.length === next.length) {
+      console.warn("⚠️ AVISO: Nenhum item foi removido! ID não encontrado.");
+    }
+    
+    return next;
+  });
+};
 
   // Criar pedido
   const addOrder = (items: OrderItem[], customerName: string) => {

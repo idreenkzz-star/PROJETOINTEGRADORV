@@ -7,10 +7,9 @@ import {
   TouchableOpacity,
   Image,
   Modal,
-  Alert,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Plus, Trash2, Receipt  } from 'lucide-react-native';
+import { Plus, Trash2 } from 'lucide-react-native';
 import { useMenu } from '@/contexts/MenuContext';
 import { MenuItem } from '@/types/menu';
 
@@ -18,23 +17,36 @@ export default function RestaurantScreen() {
   const router = useRouter();
   const { menuItems, removeMenuItem, orders } = useMenu();
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const handleRemoveItem = (id: string) => {
-    Alert.alert(
-      'Remover Item',
-      'Tem certeza que deseja remover este item do cardápio?',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Remover',
-          style: 'destructive',
-          onPress: () => {
-            removeMenuItem(id);
-            setSelectedItem(null);
-          },
-        },
-      ]
-    );
+    console.log('🟢 handleRemoveItem chamado com ID:', id);
+    console.log('🟢 Tipo do ID:', typeof id);
+    
+    // Abre o modal de confirmação
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDelete = () => {
+    if (!selectedItem) return;
+    
+    console.log('🟡 CONFIRMANDO DELETE do item:', selectedItem.id);
+    
+    // Chama a remoção
+    removeMenuItem(selectedItem.id);
+    
+    // Fecha os modais
+    setShowDeleteConfirm(false);
+    
+    setTimeout(() => {
+      console.log('🟡 Fechando modal principal...');
+      setSelectedItem(null);
+    }, 100);
+  };
+
+  const cancelDelete = () => {
+    console.log('🟡 DELETE CANCELADO');
+    setShowDeleteConfirm(false);
   };
 
   const pendingOrders = orders.filter((order) => order.status === 'pending');
@@ -44,7 +56,7 @@ export default function RestaurantScreen() {
       <View style={styles.header}>
         <Text style={styles.title}>Gerenciar Cardápio</Text>
       </View>
-    {/* topo da pagina */}
+    
       <FlatList
         data={menuItems}
         keyExtractor={(item) => item.id}
@@ -80,9 +92,9 @@ export default function RestaurantScreen() {
         <Plus size={28} color="#FFF" />
       </TouchableOpacity>
 
-      {/* Modal de Criação de um novo produto */}
+      {/* ⭐ MODAL DE DETALHES DO ITEM - ATENÇÃO NA LINHA VISIBLE ⭐ */}
       <Modal
-        visible={selectedItem !== null}
+        visible={selectedItem !== null && !showDeleteConfirm}
         transparent
         animationType="fade"
         onRequestClose={() => setSelectedItem(null)}>
@@ -90,7 +102,10 @@ export default function RestaurantScreen() {
           style={styles.modalOverlay}
           activeOpacity={1}
           onPress={() => setSelectedItem(null)}>
-          <View style={styles.modalContent}>
+          <TouchableOpacity
+            style={styles.modalContent}
+            activeOpacity={1}
+            onPress={(e) => e.stopPropagation()}>
             {selectedItem && (
               <>
                 <Image
@@ -108,15 +123,15 @@ export default function RestaurantScreen() {
                 <Text style={styles.modalCategory}>
                   {selectedItem.category}
                 </Text>
-               <TouchableOpacity
-                style={styles.editButton}
-                onPress={() => {
-                  setSelectedItem(null);
-                  router.push(`/restaurant/editar-item?id=${selectedItem.id}`);
-                }}
-              >
-                <Text style={styles.editButtonText}>Editar Prato</Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.editButton}
+                  onPress={() => {
+                    setSelectedItem(null);
+                    router.push(`/restaurant/editar-item?id=${selectedItem.id}`);
+                  }}
+                >
+                  <Text style={styles.editButtonText}>Editar Prato</Text>
+                </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.deleteButton}
                   onPress={() => handleRemoveItem(selectedItem.id)}>
@@ -127,8 +142,38 @@ export default function RestaurantScreen() {
                 </TouchableOpacity>
               </>
             )}
-          </View>
+          </TouchableOpacity>
         </TouchableOpacity>
+      </Modal>
+
+      {/* ⭐ NOVO MODAL DE CONFIRMAÇÃO DE DELETE ⭐ */}
+      <Modal
+        visible={showDeleteConfirm}
+        transparent
+        animationType="fade"
+        onRequestClose={cancelDelete}>
+        <View style={styles.confirmOverlay}>
+          <View style={styles.confirmBox}>
+            <Text style={styles.confirmTitle}>Remover Item</Text>
+            <Text style={styles.confirmMessage}>
+              Tem certeza que deseja remover este item do cardápio?
+            </Text>
+            
+            <View style={styles.confirmButtons}>
+              <TouchableOpacity
+                style={styles.cancelButton}
+                onPress={cancelDelete}>
+                <Text style={styles.cancelButtonText}>Cancelar</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity
+                style={styles.confirmButton}
+                onPress={confirmDelete}>
+                <Text style={styles.confirmButtonText}>Remover</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
       </Modal>
     </View>
   );
@@ -317,5 +362,63 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 16,
     fontWeight: '600',
+  },
+  
+  // ⭐ ESTILOS DO MODAL DE CONFIRMAÇÃO ⭐
+  confirmOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  confirmBox: {
+    backgroundColor: '#FFF',
+    borderRadius: 16,
+    padding: 24,
+    width: '100%',
+    maxWidth: 350,
+  },
+  confirmTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 12,
+    textAlign: 'center',
+    color: '#333',
+  },
+  confirmMessage: {
+    fontSize: 16,
+    color: '#666',
+    marginBottom: 24,
+    textAlign: 'center',
+    lineHeight: 22,
+  },
+  confirmButtons: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  cancelButton: {
+    flex: 1,
+    backgroundColor: '#E0E0E0',
+    padding: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  cancelButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  confirmButton: {
+    flex: 1,
+    backgroundColor: '#E74C3C',
+    padding: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  confirmButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#FFF',
   },
 });
